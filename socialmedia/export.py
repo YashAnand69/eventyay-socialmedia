@@ -1515,7 +1515,11 @@ def sync_posts_to_db(event, request=None):
                 "status": initial_status,
             },
         )
-        if not created and not db_post.is_pinned:
+        if (
+            not created
+            and not db_post.is_pinned
+            and db_post.status != SocialMediaPostStatus.PUBLISHED
+        ):
             db_post.scheduled_at = scheduled_at
             db_post.post_text = p["post_text"]
             if "media_url" in p and p["media_url"] is not None:
